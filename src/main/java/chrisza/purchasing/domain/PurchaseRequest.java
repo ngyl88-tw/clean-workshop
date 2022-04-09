@@ -19,21 +19,25 @@ public class PurchaseRequest {
 
     public void validate() throws PurchaseRequestException {
 
-        if (!Approver.isHigherLevelThan(Owner)) {
-            throw new PurchaseRequestException("Invalid approver hierarchy.");
-        }
-
-        int totalPurchase = Items.stream()
-                .mapToInt(PurchaseRequestItem::getTotalPrice)
-                .sum();
-        checkApproverByTotalPurchase(totalPurchase, Approver);
+        checkRequestOwnerAndApprover(Owner, Approver);
+        checkApproverByTotalPurchase(Items, Approver);
 
     }
 
-    private static void checkApproverByTotalPurchase(int totalPurchase, Employee approver) throws PurchaseRequestException {
+    private static void checkRequestOwnerAndApprover(Employee owner, Employee approver) throws PurchaseRequestException {
         if(!approver.isManagement()) {
             throw new PurchaseRequestException("Approver need to be Management level.");
         }
+
+        if (!owner.isManagedUnder(approver)) {
+            throw new PurchaseRequestException("Invalid approver hierarchy.");
+        }
+    }
+
+    private static void checkApproverByTotalPurchase(List<PurchaseRequestItem> items, Employee approver) throws PurchaseRequestException {
+        int totalPurchase = items.stream()
+                .mapToInt(PurchaseRequestItem::getTotalPrice)
+                .sum();
 
         if (totalPurchase >= AMOUNT_REQUIRING_SENIOR_MANAGEMENT_APPROVAL && !approver.isSeniorManagement()) {
             throw new PurchaseRequestException("Require Senior Management approval for purchase amount.");
