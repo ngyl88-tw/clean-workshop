@@ -1,23 +1,44 @@
 package chrisza.purchasing.domain;
 
+import static chrisza.purchasing.domain.Employee.EmployeeLevel.MID;
+import static chrisza.purchasing.domain.Employee.EmployeeLevel.SENIOR;
+
 public class Employee {
     private String EmailAddress;
-    private EmployeeLevel level;
+    private EmployeeLevel employeeLevel;
 
     public Employee(String emailAddress) {
         EmailAddress = emailAddress;
     }
 
     public boolean isHigherLevelThan(Employee employee) {
-        return this.level.getHierarchy() > employee.getLevel().getHierarchy();
+        return this.employeeLevel.getHierarchy() > employee.getLevel().getHierarchy();
     }
 
     public boolean isSeniorManagement() {
-        return EmployeeLevel.SENIOR.equals(this.level);
+        return SENIOR.equals(this.employeeLevel);
     }
 
     public boolean isManagement() {
-        return EmployeeLevel.MID.equals(this.level) || EmployeeLevel.SENIOR.equals(this.level);
+        return MID.equals(this.employeeLevel) || SENIOR.equals(this.employeeLevel);
+    }
+
+    /* Employee Information */
+
+    enum EmployeeLevel {
+        SENIOR(2),
+        MID(1),
+        ORDINARY(0);
+
+        private final int hierarchy;
+
+        EmployeeLevel(int hierarchy) {
+            this.hierarchy = hierarchy;
+        }
+
+        public int getHierarchy() {
+            return hierarchy;
+        }
     }
 
     /* Setters and Getters */
@@ -31,10 +52,10 @@ public class Employee {
     }
 
     public EmployeeLevel getLevel() {
-        return level;
+        return employeeLevel;
     }
 
-    public void setLevel(EmployeeLevel level) {
-        this.level = level;
+    public void setLevel(EmployeeLevel employeeLevel) {
+        this.employeeLevel = employeeLevel;
     }
 }

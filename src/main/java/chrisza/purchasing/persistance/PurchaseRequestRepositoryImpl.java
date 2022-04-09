@@ -28,7 +28,7 @@ public class PurchaseRequestRepositoryImpl implements PurchaseRequestRepository 
         return database.stream()
                 .filter(purchaseRequest -> id == purchaseRequest.getId())
                 .findFirst()
-                .orElseGet(null);
+                .orElse(null);
     }
 
 }
