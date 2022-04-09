@@ -3,6 +3,7 @@ package chrisza.purchasing.usecase;
 import chrisza.purchasing.domain.PurchaseRequest;
 import chrisza.purchasing.domain.PurchaseRequestException;
 import chrisza.purchasing.domain.dependencies.PurchaseRequestRepository;
+import chrisza.purchasing.persistance.SavePurchaseRequestException;
 
 public class PurchaseRequestUseCase {
 
@@ -12,9 +13,14 @@ public class PurchaseRequestUseCase {
         this.repository = repository;
     }
 
-    public PurchaseRequest Create(PurchaseRequest purchaseRequest) throws PurchaseRequestException {
+    public PurchaseRequest Create(PurchaseRequest purchaseRequest) throws PurchaseRequestException, PurchaseSystemException {
         purchaseRequest.validate();
-        return repository.Create(purchaseRequest);
+
+        try {
+            return repository.Create(purchaseRequest);
+        } catch (SavePurchaseRequestException e) {
+            throw new PurchaseSystemException(e);
+        }
     }
 
 }

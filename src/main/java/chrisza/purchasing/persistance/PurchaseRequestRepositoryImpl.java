@@ -12,11 +12,11 @@ public class PurchaseRequestRepositoryImpl implements PurchaseRequestRepository 
     private final List<PurchaseRequest> database = new ArrayList<>();
 
     @Override
-    public PurchaseRequest Create(PurchaseRequest purchaseRequest) {
+    public PurchaseRequest Create(PurchaseRequest purchaseRequest) throws SavePurchaseRequestException {
         // assume validation at business domain
         // not saving if id exist
         if (purchaseRequest.getId() != null) {
-            return null;
+            throw new SavePurchaseRequestException();
         }
         purchaseRequest.setId(UUID.randomUUID());
         database.add(purchaseRequest);
