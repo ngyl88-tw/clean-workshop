@@ -1,12 +1,8 @@
 package chrisza.purchasing.usecase;
 
-import chrisza.purchasing.domain.Employee;
 import chrisza.purchasing.domain.PurchaseRequest;
 import chrisza.purchasing.domain.PurchaseRequestException;
-import chrisza.purchasing.domain.PurchaseRequestItem;
 import chrisza.purchasing.domain.dependencies.PurchaseRequestRepository;
-
-import java.util.List;
 
 public class PurchaseRequestUseCase {
 
@@ -16,9 +12,8 @@ public class PurchaseRequestUseCase {
         this.repository = repository;
     }
 
-    public PurchaseRequest Create(List<PurchaseRequestItem> items, Employee owner, Employee approver)
-            throws PurchaseRequestException {
-        PurchaseRequest purchaseRequest = PurchaseRequest.create(items, owner, approver);
+    public PurchaseRequest Create(PurchaseRequest purchaseRequest) throws PurchaseRequestException {
+        purchaseRequest.validate();
         return repository.Create(purchaseRequest);
     }
 

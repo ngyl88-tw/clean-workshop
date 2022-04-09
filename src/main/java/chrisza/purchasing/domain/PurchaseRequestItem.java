@@ -4,9 +4,17 @@ import java.util.UUID;
 
 public class PurchaseRequestItem {
     private UUID Id;
-    private String Item;
-    private int Amount;
-    private int TotalPrice;
+    private final String Item;
+    private final int Amount;
+    private final int TotalPrice;
+
+    public PurchaseRequestItem(String item, int amount, int totalPrice) {
+        Item = item;
+        Amount = amount;
+        TotalPrice = totalPrice;
+    }
+
+    /* Getters and Setters */
 
     public UUID getId() {
         return Id;
@@ -16,24 +24,12 @@ public class PurchaseRequestItem {
         return TotalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
-        this.TotalPrice = totalPrice;
-    }
-
     public int getAmount() {
         return Amount;
     }
 
-    public void setAmount(int amount) {
-        this.Amount = amount;
-    }
-
     public String getItem() {
         return Item;
-    }
-
-    public void setItem(String item) {
-        this.Item = item;
     }
 
     public void setId(UUID id) {

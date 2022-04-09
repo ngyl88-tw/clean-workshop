@@ -5,31 +5,28 @@ import java.util.UUID;
 
 public class PurchaseRequest {
     private UUID id;
-    private List<PurchaseRequestItem> Items;
-    private Employee Owner;
-    private Employee Approver;
+    private final List<PurchaseRequestItem> Items;
+    private final Employee Owner;
+    private final Employee Approver;
 
     private static final int AMOUNT_REQUIRING_SENIOR_MANAGEMENT_APPROVAL = 100_000;
 
-    PurchaseRequest(List<PurchaseRequestItem> items, Employee owner, Employee approver) {
-        this.setItems(items);
-        this.setOwner(owner);
-        this.setApprover(approver);
+    public PurchaseRequest(List<PurchaseRequestItem> items, Employee owner, Employee approver) {
+        Items = items;
+        Owner = owner;
+        Approver = approver;
     }
 
-    public static PurchaseRequest create(List<PurchaseRequestItem> items, Employee owner, Employee approver)
-            throws PurchaseRequestException {
+    public void validate() throws PurchaseRequestException {
 
-        if (!approver.isHigherLevelThan(owner)) {
+        if (!Approver.isHigherLevelThan(Owner)) {
             throw new PurchaseRequestException("Invalid approver hierarchy.");
         }
 
-        int totalPurchase = items.stream()
+        int totalPurchase = Items.stream()
                 .mapToInt(PurchaseRequestItem::getTotalPrice)
                 .sum();
-        checkApproverByTotalPurchase(totalPurchase, approver);
-
-        return new PurchaseRequest(items, owner, approver);
+        checkApproverByTotalPurchase(totalPurchase, Approver);
 
     }
 
@@ -49,24 +46,12 @@ public class PurchaseRequest {
         return Approver;
     }
 
-    public void setApprover(Employee approver) {
-        this.Approver = approver;
-    }
-
     public Employee getOwner() {
         return Owner;
     }
 
-    public void setOwner(Employee owner) {
-        this.Owner = owner;
-    }
-
     public List<PurchaseRequestItem> getItems() {
         return Items;
-    }
-
-    public void setItems(List<PurchaseRequestItem> items) {
-        this.Items = items;
     }
 
     public UUID getId() {
